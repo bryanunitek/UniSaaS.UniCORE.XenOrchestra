@@ -1,45 +1,25 @@
-<h3 align="center"><b>Xen Orchestra</b></h3>
-<p align="center"><b>Manage, Backup and Cloudify your XCP-ng/XenServer infrastructure</b></p>
+# UniSaaS.UniCORE.XenOrchestra
 
-![](https://repository-images.githubusercontent.com/8077957/6dcf71fd-bad9-4bfa-933f-b466c52d513d)
+**UniCORE fork of upstream `vatesfr/xen-orchestra`.** Part of the UniCORE upstream-merge building-block fleet.
 
-XO (Xen Orchestra) is a complete solution to visualize, manage, backup and delegate your XCP-ng (or XenServer) infrastructure. **No agent** is required for it to work.
+Author: **Bryan Fred, Unitek Systems Limited, Bedford, United Kingdom.**
+Fork family created: **2026-07-07 UTC.** Standard layer added: **2026-07-09 22:33 UTC.**
 
-It provides a web UI, a CLI and a REST API, while also getting a Terraform provider among other connectors/plugins.
+---
 
-## ⚡️ Quick start
+## What this repository is
 
-Log in to your account and use the deploy form available from the [Vates website](https://vates.tech/deploy/).
+`bryanunitek/UniSaaS.UniCORE.XenOrchestra` is the **XenOrchestra** family member.
 
-## 📚 Documentation
+**Family purpose:** Web management UI + backup/orchestration for XCP-ng / XenServer. UniCORE.GVB virtualisation-management substrate (pairs with UniCORE.XCP).
 
-The official documentation is available at https://docs.xen-orchestra.com/
+## Branch model
 
-Documentation updates are deployed automatically once per day.
+- `main` — tracks upstream `vatesfr/xen-orchestra` (receives the periodic upstream-merge; nothing deploys from `main`).
+- `unicore` — the deploy branch: `main` + UniCORE additions (Badge/attribution, config, integration). **Deploy ONLY from `unicore`.**
 
-## 🚀 Features
+See [`UPSTREAM-MERGE-DISCIPLINE.md`](UPSTREAM-MERGE-DISCIPLINE.md) for the merge sequence and [`STARTING-POINT.md`](STARTING-POINT.md) for the upstream anchor. Upstream's own README is preserved verbatim as [`README.upstream.md`](README.upstream.md).
 
-- **Centralized interface**: one Xen Orchestra to rule your entire infrastructure, even across datacenters at various locations
-- **Administration and management:** VM creation, management, migration, metrics and statistics, XO proxies for remote sites… XO will become your best friend!
-- **Backup & Disaster Recovery:** The backup is an essential component for the security of your infrastructure. With Xen Orchestra, select the backup mode that suits you best and protect your VMs and your business. Rolling snapshot, Full backup & replication, incremental backup & replication, mirror backup, S3 support among many other possibilities!
-- **Cloud Enabler:** Xen Orchestra is your cloud initiator for XCP-ng (and XenServer). Group management, resource delegation and easy group administration. The Cloud is yours!
+## Licence
 
-## 🌍 Translations
-
-Status of XO Lite & XO 6:
-
-[![Translation status](http://translate.vates.tech/widget/xen-orchestra/multi-auto.svg)](http://translate.vates.tech/engage/xen-orchestra/)
-
-[Help us translate Xen Orchestra in more languages!](http://translate.vates.tech/engage/xen-orchestra/)
-
-## 📸 Screenshots
-
-![](https://vates.tech/assets/img/illustrations/xen-orchestra-screen-1.png.avif)
-
-![](https://vates.tech/assets/img/illustrations/xen-orchestra-screen-3.png.avif)
-
-![](https://vates.tech/assets/img/illustrations/xen-orchestra-screen-4.png.avif)
-
-## License
-
-AGPL3 © [Vates](https://vates.tech)
+Code additions match upstream's licence; UniCORE documentation additions are CC BY 4.0. See [`LICENSE.md`](LICENSE.md); upstream licence preserved as `LICENSE.upstream` where applicable.

@@ -1,2 +1,20 @@
-# UniCORE.XenOrchestra — Starting Point
-Fork of upstream `vatesfr/xen-orchestra` (the ONE monorepo; XOA appliance + Community/from-source builds both derive from it). `main` tracks upstream (monthly upstream-merge). `unicore` = deploy branch (main + UniCORE additions to build XOA-equivalent functionality so UniCORE runs standalone). Deployed on the XO6CE-001 hosts. Deploy ONLY from `unicore`. Created 2026-07-07 by Team UniCORE.
+# Starting Point — XenOrchestra
+
+This repository is a **forward fork** of upstream, tracking upstream forward on `main`.
+
+## Anchor
+
+| Field | Value |
+|---|---|
+| Upstream | https://github.com/vatesfr/xen-orchestra |
+| Anchor commit on `main` | `377581b44` |
+| Fork family created | 2026-07-07 UTC |
+| Standard layer added | 2026-07-09 22:33 UTC |
+
+## Why
+
+Per `UPSTREAM-MERGE-DISCIPLINE.md`, this repository tracks upstream forward. `main` mirrors upstream (periodic upstream-merge cron); `unicore` carries UniCORE additions and is the only deploy branch.
+
+## Pre-fork history
+
+Full upstream history is available at https://github.com/vatesfr/xen-orchestra.
