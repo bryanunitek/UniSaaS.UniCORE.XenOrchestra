@@ -1,5 +1,6 @@
 import { formValidationConfig } from '@/plugins/form-validation.config.ts'
 import i18n from '@core/i18n'
+import { useOverlayStore } from '@core/packages/overlay/use-overlay-store.ts'
 import { RegleVuePlugin } from '@regle/core'
 import type { XoUser } from '@vates/types'
 import { useFetch } from '@vueuse/core'
@@ -46,6 +47,14 @@ async function init() {
   app.use(createPinia())
   app.use(router)
   app.use(RegleVuePlugin, formValidationConfig)
+
+  try {
+    await router.isReady()
+  } catch (error) {
+    console.error('Initial navigation failed', error)
+  }
+
+  router.afterEach(() => useOverlayStore().abortAll())
 
   app.mount('#app')
 }

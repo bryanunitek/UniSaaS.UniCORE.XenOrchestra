@@ -697,31 +697,40 @@ const methods = {
 
   async _updateLinstorPackages() {
     const hosts = Object.values(this.objects.indexes.type.host)
-    const nSteps = 4
-    const nOperations = nSteps * hosts.length
+    const steps = [
+      ['updater.py', 'update', { packages: 'xcp-ng-xapi-plugins' }],
+      ['updater.py', 'update', { packages: 'xcp-ng-linstor' }],
+      ['updater.py', 'update', { packages: 'linstor-satellite' }],
+      ['updater.py', 'update', { packages: 'linstor-controller' }],
+      ['service.py', 'stop_service', { service: 'linstor-controller' }],
+      ['service.py', 'restart_service', { service: 'linstor-satellite' }],
+    ]
+    const nOperations = steps.length * hosts.length
     let operationDone = 0
 
     const callPluginOnAllHost = async (plugin, fn, args) => {
       for (const host of hosts) {
         await this.call('host.call_plugin', host.$ref, plugin, fn, args)
         operationDone++
-        task.set('progress', (operationDone / nOperations) * 100)
+        task.set('progress', Math.round((operationDone / nOperations) * 100))
       }
     }
 
     const task = new Task({ properties: { name: 'Updating LINSTOR packages', progress: 0 } })
     return task.run(async () => {
-      await callPluginOnAllHost('updater.py', 'update', { packages: 'xcp-ng-xapi-plugins' })
-      await callPluginOnAllHost('updater.py', 'update', { packages: 'xcp-ng-linstor' })
-      await callPluginOnAllHost('updater.py', 'update', { packages: 'linstor-satellite' })
-      await callPluginOnAllHost('updater.py', 'update', { packages: 'linstor-controller' })
-      await callPluginOnAllHost('service.py', 'stop_service', { service: 'linstor-controller' })
-      await callPluginOnAllHost('service.py', 'restart_service', { service: 'linstor-satellite' })
+      for (const [plugin, fn, args] of steps) {
+        await callPluginOnAllHost(plugin, fn, args)
+      }
+      // not redundant: ends the task at 100 even when there is no host to iterate on
       task.set('progress', 100)
     })
   },
 
-  async rollingPoolUpdate($defer, parentTask, { xsCredentials, force = false, rebootVm = force } = {}) {
+  async rollingPoolUpdate(
+    $defer,
+    parentTask,
+    { xsCredentials, force = false, rebootVm = force, shutdownPinnedVms = false } = {}
+  ) {
     if (some(this.objects.indexes.type.SR, { type: 'linstor' })) {
       await this._updateLinstorPackages()
     }
@@ -785,6 +794,7 @@ const methods = {
     await Task.run({ properties: { name: `Updating and rebooting` } }, async () => {
       await this.rollingPoolReboot(parentTask, {
         xsCredentials,
+        shutdownPinnedVms,
         beforeEvacuateVms: () => {
           // On XS < 8.4 and CH, start by installing patches on all hosts
           if (!isXcp && !isXsWithCdnUpdates) {

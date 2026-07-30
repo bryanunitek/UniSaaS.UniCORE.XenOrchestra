@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:stream'
 import type {
-  AnyXoBackupJob,
   AnyXoJob,
   AnyXoLog,
   XapiXoRecord,
@@ -21,6 +20,7 @@ import type {
   XoVmBackupArchive,
 } from './xo.mjs'
 import { VatesTask } from './lib/vates-task.mjs'
+import type { PluginRestRouteDefinition } from './lib/rest-api.mjs'
 import {
   Xapi,
   XapiHostStats,
@@ -195,6 +195,7 @@ export type XoApp = {
       params?: any
     }
   ) => () => void // eslint-disable-line @typescript-eslint/no-explicit-any
+  registerRestRoutes: (routes: PluginRestRouteDefinition[], base?: string) => () => void
   authenticateUser: (
     credentials: { token?: string; username?: string; password?: string },
     userData?: { ip?: string },
@@ -233,7 +234,11 @@ export type XoApp = {
     url: string
   }): Promise<XoBackupRepository>
   createUser(params: { name?: string; password?: string; [key: string]: unknown }): Promise<XoUser>
-  deleteAclV2GroupRole(groupId: XoGroup['id'], roleId: XoAclRole['id']): Promise<boolean>
+  deleteAclV2GroupRole(
+    groupId: XoGroup['id'],
+    roleId: XoAclRole['id'],
+    opts?: { bypassAuthorization?: boolean }
+  ): Promise<boolean>
   deleteAclV2Privilege(privilegeId: XoAclBasePrivilege['id'], options?: { force?: boolean }): Promise<boolean>
   deleteAclV2Role(roleId: XoAclRole['id'], options?: { force?: boolean }): Promise<boolean>
   deleteGroup(id: XoGroup['id']): Promise<void>
@@ -246,10 +251,22 @@ export type XoApp = {
   getAclV2Privilege(id: XoAclBasePrivilege['id']): Promise<XoAclBasePrivilege>
   getAclV2Privileges(): Promise<XoAclBasePrivilege[]>
   getAclV2RolePrivileges(roleId: XoAclRole['id']): Promise<XoAclBasePrivilege[]>
-  getAclV2Role(id: XoAclRole['id']): Promise<XoAclRole>
-  deleteAclV2UserRole(userId: XoUser['id'], roleId: XoAclRole['id']): Promise<boolean>
+  getAclV2Role(id: XoAclRole['id'], opts?: { bypassAuthorization?: boolean }): Promise<XoAclRole>
+  deleteAclV2UserRole(
+    userId: XoUser['id'],
+    roleId: XoAclRole['id'],
+    opts?: { bypassAuthorization?: boolean }
+  ): Promise<boolean>
+  getAclV2GroupRoles(
+    groupId: XoGroup['id'],
+    opts?: { bypassAuthorization?: boolean }
+  ): Promise<Exclude<XoAclRole, { isTemplate: true }>[]>
   getAclV2Roles(): Promise<XoAclRole[]>
   getAclV2UserPrivileges(userId: XoUser['id']): Promise<XoAclBasePrivilege[]>
+  getAclV2UserRoles(
+    userId: XoUser['id'],
+    opts?: { bypassAuthorization?: boolean; fromGroup?: boolean; fromUser?: boolean }
+  ): Promise<XoAclRole[]>
   getAllGroups(): Promise<XoGroup[]>
   getAllProxies(): Promise<XoProxy[]>
   getAllJobs<T extends AnyXoJob['type']>(type: T): Promise<Extract<AnyXoJob, { type: T }>[]>
@@ -324,8 +341,11 @@ export type XoApp = {
       readOnly?: XoServer['readOnly']
     }
   ): Promise<XoServer>
-  rollingPoolReboot(pool: XoPool, opts?: { parentTask?: VatesTask }): Promise<void>
-  rollingPoolUpdate(pool: XoPool, opts?: { rebootVm?: boolean; parentTask?: VatesTask }): Promise<void>
+  rollingPoolReboot(pool: XoPool, opts?: { parentTask?: VatesTask; shutdownPinnedVms?: boolean }): Promise<void>
+  rollingPoolUpdate(
+    pool: XoPool,
+    opts?: { rebootVm?: boolean; parentTask?: VatesTask; shutdownPinnedVms?: boolean }
+  ): Promise<void>
   setVmResourceSet(vmId: XoVm['id'], resourceSetId: string | null, force?: boolean): Promise<void>
   shareVmResourceSet(vmId: XoVm['id']): Promise<void>
   removeUserFromGroup(userId: XoUser['id'], id: XoGroup['id']): Promise<void>
