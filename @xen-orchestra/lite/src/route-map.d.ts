@@ -106,6 +106,20 @@ declare module 'vue-router/auto-routes' {
       { uuid: ParamValue<false> },
       | never
     >,
+    '/network/new': RouteRecordInfo<
+      '/network/new',
+      '/network/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/network/new-bonded': RouteRecordInfo<
+      '/network/new-bonded',
+      '/network/new-bonded',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/object-not-found': RouteRecordInfo<
       '/object-not-found',
       '/object-not-found',
@@ -229,13 +243,6 @@ declare module 'vue-router/auto-routes' {
     '/story/linear-chart': RouteRecordInfo<
       '/story/linear-chart',
       '/story/linear-chart',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/story/overlay': RouteRecordInfo<
-      '/story/overlay',
-      '/story/overlay',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -390,27 +397,6 @@ declare module 'vue-router/auto-routes' {
     '/story/web-core/object-icon/vts-object-icon': RouteRecordInfo<
       '/story/web-core/object-icon/vts-object-icon',
       '/story/web-core/object-icon/vts-object-icon',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/story/web-core/overlay/vts-overlay-button': RouteRecordInfo<
-      '/story/web-core/overlay/vts-overlay-button',
-      '/story/web-core/overlay/vts-overlay-button',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/story/web-core/overlay/vts-overlay-cancel-button': RouteRecordInfo<
-      '/story/web-core/overlay/vts-overlay-cancel-button',
-      '/story/web-core/overlay/vts-overlay-cancel-button',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/story/web-core/overlay/vts-overlay-confirm-button': RouteRecordInfo<
-      '/story/web-core/overlay/vts-overlay-confirm-button',
-      '/story/web-core/overlay/vts-overlay-confirm-button',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -1103,6 +1089,18 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
+    'src/pages/network/new.vue': {
+      routes:
+        | '/network/new'
+      views:
+        | never
+    }
+    'src/pages/network/new-bonded.vue': {
+      routes:
+        | '/network/new-bonded'
+      views:
+        | never
+    }
     'src/pages/object-not-found.vue': {
       routes:
         | '/object-not-found'
@@ -1211,12 +1209,6 @@ declare module 'vue-router/auto-routes' {
     'src/stories/linear-chart.story.vue': {
       routes:
         | '/story/linear-chart'
-      views:
-        | never
-    }
-    'src/stories/overlay.story.vue': {
-      routes:
-        | '/story/overlay'
       views:
         | never
     }
@@ -1349,24 +1341,6 @@ declare module 'vue-router/auto-routes' {
     'src/stories/web-core/object-icon/vts-object-icon.story.vue': {
       routes:
         | '/story/web-core/object-icon/vts-object-icon'
-      views:
-        | never
-    }
-    'src/stories/web-core/overlay/vts-overlay-button.story.vue': {
-      routes:
-        | '/story/web-core/overlay/vts-overlay-button'
-      views:
-        | never
-    }
-    'src/stories/web-core/overlay/vts-overlay-cancel-button.story.vue': {
-      routes:
-        | '/story/web-core/overlay/vts-overlay-cancel-button'
-      views:
-        | never
-    }
-    'src/stories/web-core/overlay/vts-overlay-confirm-button.story.vue': {
-      routes:
-        | '/story/web-core/overlay/vts-overlay-confirm-button'
       views:
         | never
     }
