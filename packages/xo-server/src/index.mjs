@@ -163,6 +163,12 @@ const DEFAULT_HELMET_CONFIG = {
     },
   },
 }
+
+// Proxied third-party markup (e.g. Netdata) can't satisfy the hash
+// allowlist above, so it gets a more permissive CSP instead of none,
+// `/v5/netdata` self-proxies to `/netdata` (see config.toml)
+const CSP_EXEMPT_PREFIXES = ['/v5/netdata', '/netdata']
+
 async function createExpressApp(config) {
   const app = createExpress()
 
@@ -175,6 +181,20 @@ async function createExpressApp(config) {
     Array.isArray(dst) ? dst.concat(src) : undefined
   )
   app.use(helmet(helmetConfig))
+
+  const { contentSecurityPolicy } = helmetConfig
+  if (contentSecurityPolicy) {
+    app.use(
+      CSP_EXEMPT_PREFIXES,
+      helmet.contentSecurityPolicy({
+        ...contentSecurityPolicy,
+        directives: {
+          ...contentSecurityPolicy.directives,
+          'script-src': ["'self'", "'unsafe-inline'"],
+        },
+      })
+    )
+  }
 
   app.use(compression())
 
@@ -669,6 +689,16 @@ const setUpProxies = (express, opts, xo) => {
       ignorePath: true,
       xfwd: true,
       ...dynamicProxyOptions,
+    })
+    // `http-proxy` only destroys the upstream request on the incoming request's
+    // `aborted` event, which does not cover a client going away mid-response:
+    // the pending response would then be retained forever on both sides
+    .on('proxyReq', (proxyReq, req, res) => {
+      res.on('close', () => {
+        if (!res.writableFinished) {
+          proxyReq.destroy()
+        }
+      })
     })
     .on('error', (error, req, res) => {
       // `res` can be either a `ServerResponse` or a `Socket` (which does not have

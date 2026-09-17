@@ -7,8 +7,6 @@ import tarStream from 'tar-stream'
 import { Ref } from 'xen-api'
 import { incorrectState, invalidParameters } from 'xo-common/api-errors.js'
 
-import backupGuard from './_backupGuard.mjs'
-
 import { fromCallback } from 'promise-toolbox'
 import { moveFirst } from '../_moveFirst.mjs'
 
@@ -251,15 +249,8 @@ installPatches.description = 'Install patches on hosts'
 
 // -------------------------------------------------------------------
 
-export const rollingUpdate = async function ({ bypassBackupCheck = false, pool, rebootVm, shutdownPinnedVms }) {
-  const poolId = pool.id
-  if (bypassBackupCheck) {
-    log.warn('pool.rollingUpdate with argument "bypassBackupCheck" set to true', { poolId })
-  } else {
-    await backupGuard.call(this, poolId)
-  }
-
-  await this.rollingPoolUpdate(pool, { rebootVm, shutdownPinnedVms })
+export const rollingUpdate = async function ({ bypassBackupCheck, pool, rebootVm, shutdownPinnedVms }) {
+  await this.rollingPoolUpdate(pool, { bypassBackupCheck, rebootVm, shutdownPinnedVms })
 }
 
 rollingUpdate.params = {
@@ -286,20 +277,29 @@ rollingUpdate.resolve = {
 
 // -------------------------------------------------------------------
 
-export async function rollingReboot({ bypassBackupCheck, pool, shutdownPinnedVms }) {
-  const poolId = pool.id
-  if (bypassBackupCheck) {
-    log.warn('pool.rollingReboot with argument "bypassBackupCheck" set to true', { poolId })
-  } else {
-    await backupGuard.call(this, poolId)
-  }
+export function getRollingUpdateRecovery({ pool }) {
+  return this.getRollingUpdateRecovery(pool.id)
+}
 
-  await this.rollingPoolReboot(pool, { shutdownPinnedVms })
+getRollingUpdateRecovery.params = {
+  pool: { type: 'string' },
+}
+
+getRollingUpdateRecovery.resolve = {
+  pool: ['pool', 'pool', 'administrate'],
+}
+
+getRollingUpdateRecovery.description = 'Get the recovery status of an incomplete rolling pool update, if any'
+
+// -------------------------------------------------------------------
+
+export async function rollingReboot({ bypassBackupCheck, pool, shutdownPinnedVms }) {
+  await this.rollingPoolReboot(pool, { bypassBackupCheck, shutdownPinnedVms })
 }
 
 rollingReboot.params = {
   bypassBackupCheck: {
-    default: false,
+    optional: true,
     type: 'boolean',
   },
   pool: { type: 'string' },
