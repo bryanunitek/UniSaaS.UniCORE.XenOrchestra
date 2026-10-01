@@ -21,25 +21,11 @@ const messages = {
   hostIp: 'Host IP',
   interfaces: 'Interfaces',
   keyValue: '{key}: {value}',
-  esxiLibraryInfo: 'The V2V tool needs the vddk library, provided by Broadcom. Please download it from their website',
-  esxiLibraryLink: 'Download link',
-
-  esxiVddkLibrary: 'Drop the tar.gz file of the vddk library (linux)',
-  esxiVddkLibraryImport: 'Import and install the Vddk library. VDDK9 need nbdkit 1.42+',
-  esxiLibraryManualInstall:
-    'For other systems, you can install manually from https://gitlab.com/nbdkit/ . For reference the list of packages need for a debian 13 is **git dh-autoreconf pkg-config make libxml2-dev ocaml libc-bin**',
-  esxiLibraryAutoInstall: 'install {library} (debian based system)',
-  esxiLibraryInstalling:
-    "Installing {library} can take a few minutes. You can check the progress in the XO tasks screen while it's running.",
   esxiProgressLinkText: 'Track progress',
-
-  esxiLibraryOutdated:
-    '{library} library is outdated expecting {expectedVersion}, got {version}. Please uninstall it and install the required version.',
   esxiCheckingPrerequisite: 'Checking prerequisite on XO',
   esxiCheckedPrerequisite: 'Result of the prerequisite check on XO',
 
   esxiCheckingPrerequisiteError: 'Must be corrected before importing VM',
-  esxiCheckedPrerequisiteVersion: 'expected version {expectedVersion} , {version} installed',
   esxiImportSslCertificate: 'Skip SSL check',
   esxiImportRememberLogin: 'Remember connection in this browser',
   esxiImportRememberWarning:
@@ -2675,11 +2661,15 @@ const messages = {
 
   // ----- XO cloud config -----
   backedUpXoConfigs: 'Backed up XO Configs',
+  disableXoConfigCloudBackupConfirm:
+    'XO config backups on Vates servers will be deleted after their expiration period (100 days). Ensure you export the XO config to your own environment',
   manageXoConfigCloudBackup: 'Manage XO Config Cloud Backup',
   selectXoConfig: 'Select XO config',
   xoConfigCloudBackup: 'XO Config Cloud Backup',
   xoConfigCloudBackupTips:
     'Your encrypted configuration is securely stored inside your Vates account and backed up once a day',
+  xoCloudConfigAcknowledgment:
+    'I acknowledge that XO Config Cloud Backup is an optional feature outside the scope of my Vates VMS contract and does not replace my responsibility to maintain my own configuration backups. I enable it voluntarily, at my sole risk.',
   xoCloudConfigEnterPassphrase: 'Passphrase is required to encrypt backups',
   xoCloudConfigRestoreEnterPassphrase: 'Enter the passphrase:',
 
