@@ -17,7 +17,7 @@ The two replication job types now have clearer names, but the XO 5 screens below
 | [Full replication](./backup-types/full_replication.md)                          | Disaster Recovery (DR)           |
 | [Incremental replication](./backup-types/incremental_replication.md)               | Continuous Replication (CR)      |
 
-Nothing changed in behaviour: only the labels differ. XO 6 uses the current names, and the tags XO puts on replicas (`Disaster Recovery`, `Continuous Replication`) kept the former ones.
+Nothing changed in behavior: only the labels differ. XO 6 uses the current names, and the tags XO puts on replicas (`Disaster Recovery`, `Continuous Replication`) kept the former ones.
 :::
 
 ## Interface
@@ -643,6 +643,7 @@ You can also restore specific files and directories inside a VM. It works with a
 
 - File level restore **is only possible on incremental backups**. Also, due to some technical limitations, you won't be able to do file level restore if you have a chain longer than 99 (ie retention longer than 99 records without any full between). Take a look at the [key backup interval section](./backup-types/incremental_backups.md#key-backup-interval) to set this correctly.
 - File level restore **is only possible on a single VDI**, it does not support LVM Volume Groups that span multiple VDIs.
+- File level restore **does not support symbolic links**: they are hidden when browsing, skipped when a folder is restored, and a path going through one is refused. Restore the link target directly instead.
 - The following Microsoft solutions are **not supported**:
   - [Data Deduplication](https://learn.microsoft.com/en-us/windows-server/storage/data-deduplication/overview)
   - [Logical Disk Manager](https://en.wikipedia.org/wiki/Logical_Disk_Manager) (LDM)
